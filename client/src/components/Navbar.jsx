@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
 
-const Navbar = ({ isBillingModalOpen }) => {
+const Navbar = () => {
   const { user } = useUser();
   const { openSignIn } = useClerk();
   const location = useLocation();
@@ -32,9 +32,8 @@ const Navbar = ({ isBillingModalOpen }) => {
 
   return (
     <nav
-      className={`sticky top-0 left-0 w-full shadow-sm transition-transform duration-300
+      className={`sticky z-10 top-0 left-0 w-full shadow-sm transition-transform duration-300
         ${showNav ? "translate-y-0" : "-translate-y-full"}
-        ${isBillingModalOpen ? "z-0" : "z-50"}
         ${isAIPage ? "bg-white" : "bg-black/80 backdrop-blur-md"}
       `}
     >
@@ -58,7 +57,7 @@ const Navbar = ({ isBillingModalOpen }) => {
           ) : (
             <button
               onClick={() => openSignIn()}
-              className="bg-white flex items-center text-pink-600 px-5 py-2 rounded-lg font-semibold shadow hover:text-white transition"
+              className="bg-white flex items-center text-pink-600 px-5 py-2 rounded-lg font-semibold shadow  transition"
             >
               Get Started&nbsp; <ArrowRight />
             </button>

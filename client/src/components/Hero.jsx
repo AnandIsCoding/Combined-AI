@@ -12,7 +12,7 @@ const services = [
   { icon: <UserCheck size={32} className="text-blue-500" />, label: "Resume Review" },
 ];
 
-const Hero = ({setIsbillingmodalopen}) => {
+const Hero = () => {
   const { user } = useUser();
   const { openSignIn } = useClerk();
   const navigate = useNavigate();
@@ -60,7 +60,7 @@ const Hero = ({setIsbillingmodalopen}) => {
         </button>
 
         {/* Pricing Table */}
-        <div onClick={() => setIsbillingmodalopen(prev => !prev)} className="mt-20  ">
+        <div  className="mt-20  ">
           <h1 className="text-2xl  mb-8 font-semibold text-yellow-400">Choose Billing</h1>
           <PricingTable
                    
