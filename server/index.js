@@ -54,3 +54,14 @@ app.listen(PORT, () => {
     chalk.bgMagentaBright(`server is running on http://localhost:${PORT}`),
   );
 });
+
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res
+    .status(StatusCodes.INTERNAL_SERVER_ERROR)
+    .json({ message: "Something went wrong!" });
+});
+
+export default app
