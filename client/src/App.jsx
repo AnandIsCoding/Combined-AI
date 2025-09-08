@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import WriteArticle from "./pages/WriteArticle";
 import RemoveBackground from "./pages/RemoveBackground";
@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import Dashboard from "./pages/dashboard";
 import RemoveObject from "./pages/RemoveObject";
 import Community from "./pages/Community";
+import { useAuth } from "@clerk/clerk-react";
 
 function App() {
   return (

@@ -1,4 +1,4 @@
-import { ArrowRight } from "lucide-react"; 
+import { ArrowRight } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
@@ -48,8 +48,8 @@ const Navbar = () => {
         </NavLink>
 
         {/* Only show user icon + name when not on /ai */}
-        {!isAIPage && (
-          user ? (
+        {!isAIPage &&
+          (user ? (
             <div className="flex items-center text-white gap-4">
               <UserButton />
               <span>{user?.fullName}</span>
@@ -61,8 +61,7 @@ const Navbar = () => {
             >
               Get Started&nbsp; <ArrowRight />
             </button>
-          )
-        )}
+          ))}
       </div>
     </nav>
   );

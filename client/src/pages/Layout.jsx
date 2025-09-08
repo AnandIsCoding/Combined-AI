@@ -17,12 +17,12 @@ function Layout() {
       {isSidebaropen ? (
         <X
           onClick={() => setIsSidebarOpen(false)}
-          className="w-6 h-6 ml-4 z-[999] mt-4  text-gray-600 sm:hidden cursor-pointer "
+          className="w-6 h-6 ml-4  mt-4  text-gray-600 sm:hidden cursor-pointer "
         />
       ) : (
         <Menu
           onClick={() => setIsSidebarOpen(true)}
-          className="w-6 h-6 ml-4 mt-4 text-gray-600 cursor-pointer sm:hidden z-[999]"
+          className="w-6 h-6 ml-4 mt-4 text-gray-600 cursor-pointer sm:hidden "
         />
       )}
 
@@ -34,23 +34,22 @@ function Layout() {
           user={user}
           setIsSidebarOpen={setIsSidebarOpen} // correct spelling
         />
-        <Outlet/>
+        <Outlet />
 
         <div className="flex-1 bg-[#F4F7FB]">{/* your page content */}</div>
       </div>
       <div
-  onClick={() => setIsSidebarOpen(prev => !prev)}
-  className="
+        onClick={() => setIsSidebarOpen((prev) => !prev)}
+        className="
     w-full 
     fixed bottom-0   /* stick to bottom */
     text-center py-2 text-black 
     bg-yellow-400 
     block sm:hidden  /* ✅ show only below 640px */
   "
->
-  See All 🤖 Services
-</div>
-
+      >
+        See All 🤖 Services
+      </div>
     </div>
   ) : (
     <div className="flex items-center justify-center h-screen">

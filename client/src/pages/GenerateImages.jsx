@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Hash, Image, Sparkles } from "lucide-react";
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
+import axios from "axios";
+import { useAuth } from "@clerk/clerk-react";
 
 function GenerateImages() {
   const imageStyle = [
@@ -19,9 +22,29 @@ function GenerateImages() {
 
   const [input, setInput] = useState("");
   const [publish, setPublish] = useState(false);
+    const [loading, setLoading] = useState(false);
+  const [content, setContent] = useState("");
+
+  const { getToken } = useAuth();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("selected style is --> ", selectedStyle);
+    try {
+      setLoading(true)
+      const prompt = `Generate an image of ${input} in the style ${selectedStyle}`
+      const { data } = await axios.post("/ai/generate-image", {prompt, publish}, {
+        headers: { Authorization: `Bearer ${await getToken()}` },
+      });
+      if (data?.success) {
+        setContent(data?.content);
+      } else {
+        toast.error(data?.message || "Something went wrong");
+      }
+    } catch (error) {
+      console.log('Error is --> ',error)
+      toast.error(error?.response.data.message || "Something went wrong");
+    }
+    setLoading(false)
   };
   return (
     <div className="h-full overflow-y-scroll p-6 w-full flex items-start flex-wrap gap-4 text-slate-700">
@@ -92,8 +115,12 @@ function GenerateImages() {
 
         {/* generate btn */}
         <br />
-        <button className="w-full flex justify-center items-center gap-2 bg-gradient-to-br from-[#00AD25] to-[#94FF50] text-white px-4 py-2 mt-6 text-sm rounded-lg cursor-pointer">
-          <Image className="w-5" />
+        <button disabled={loading} className="w-full flex justify-center items-center gap-2 bg-gradient-to-br from-[#00AD25] to-[#94FF50] text-white px-4 py-2 mt-6 text-sm rounded-lg cursor-pointer">
+          {loading ? (
+            <span className="w-4 h-4 my-1 rounded-full border-2 border-t-transparent animate-spin"></span>
+          ) : (
+             <Image className="w-5" />
+          )}
           Generate Image
         </button>
       </form>
@@ -106,10 +133,18 @@ function GenerateImages() {
         </div>
 
         {/* actual response */}
-        <div className="flex-1 flex justify-center items-center gap-5 text-gray-400">
+       {
+        !content ? (
+           <div className="flex-1 flex justify-center items-center gap-5 text-gray-400">
           <Image className="w-9 h-9" />
           <p>Enter a prompt and click "generate Image" to get started</p>
         </div>
+        ) : (
+           <div className="mt-3 h-full">
+            <img src={content} alt='ai_generated_image' className="w-full h-full"  />
+           </div>
+        )
+       }
       </div>
     </div>
   );

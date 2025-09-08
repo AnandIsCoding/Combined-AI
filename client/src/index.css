@@ -1,37 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 @import "tailwindcss";
 
-
-*{
-   font-family: "Outfit", sans-serif;
+* {
+  font-family: "Outfit", sans-serif;
 }
 
-
-
-body{
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-button{
+button {
   cursor: pointer;
 }
 
-@theme{
-  --color-primary: #5044E5;
+@theme {
+  --color-primary: #5044e5;
 }
 
-
-
-
-
-
-
-.reset-tw, .reset-tw *{
+.reset-tw,
+.reset-tw * {
   all: revert !important;
 }
 
-.cl-drawerRoot{
+.cl-drawerRoot {
   z-index: 1000;
 }
