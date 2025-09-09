@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useUser, useAuth } from "@clerk/clerk-react";
-import { Heart } from "lucide-react";
+import { Heart, Download } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -11,8 +11,6 @@ function Community() {
   const { user } = useUser();
   const [loading, setLoading] = useState(true);
   const { getToken } = useAuth();
-
-  // state for which item is toggling
   const [togglingId, setTogglingId] = useState(null);
 
   const fetchCreations = async () => {
@@ -35,11 +33,11 @@ function Community() {
 
   // like handling
   const imageLikeToggle = async (id) => {
-    setTogglingId(id); // mark this card as loading
+    setTogglingId(id);
     try {
       const { data } = await axios.post(
         "/user/toggle-like-creation",
-        { id }, // body
+        { id },
         { headers: { Authorization: `Bearer ${await getToken()}` } }
       );
       if (data?.success) {
@@ -52,7 +50,26 @@ function Community() {
       console.log("Error is --> ", error);
       toast.error(error?.response?.data?.message || "Something went wrong");
     }
-    setTogglingId(null); // done loading
+    setTogglingId(null);
+  };
+
+  // download image function
+  const handleDownload = async (imageUrl) => {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "creation-image.png";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Download failed: ", err);
+      toast.error("Download failed");
+    }
   };
 
   useEffect(() => {
@@ -61,7 +78,6 @@ function Community() {
     }
   }, [user]);
 
-  // shimmer skeleton cards
   const shimmerCards = Array.from({ length: 2 }).map((_, i) => (
     <div
       key={i}
@@ -80,7 +96,6 @@ function Community() {
       <h2 className="text-xl font-semibold mb-4">Creations</h2>
 
       {loading ? (
-        // show shimmer placeholders
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-14 md:pb-0">
           {shimmerCards}
         </div>
@@ -101,28 +116,40 @@ function Community() {
 
               <div
                 className="
-    absolute inset-0 flex flex-col justify-end p-3
-    bg-gradient-to-b from-transparent to-black/70
-    opacity-100 sm:opacity-0 sm:group-hover:opacity-100
-    transition text-white
-  "
+                absolute inset-0 flex flex-col justify-end p-3
+                bg-gradient-to-b from-transparent to-black/70
+                opacity-100 sm:opacity-0 sm:group-hover:opacity-100
+                transition text-white
+              "
               >
                 <p className="text-sm mb-2 line-clamp-2">{creation.prompt}</p>
-                <div className="flex gap-1 items-center justify-end">
-                  <p>{creation.likes.length}</p>
 
-                  {togglingId === creation.id ? (
-                    <span className="w-5 h-5 my-1 rounded-full border-2 border-t-transparent animate-spin border-white"></span>
-                  ) : (
-                    <Heart
-                      onClick={() => imageLikeToggle(creation.id)}
-                      className={`w-5 h-5 hover:scale-110 transition cursor-pointer ${
-                        creation?.likes?.includes(user?.id)
-                          ? "fill-red-500 text-red-600"
-                          : "text-white"
-                      }`}
-                    />
-                  )}
+                <div className="flex gap-3 items-center justify-between">
+                  {/* download button */}
+                  <button
+                    onClick={() => handleDownload(creation.content)}
+                    className="flex items-center gap-1 px-3 py-1 bg-green-500/90 hover:bg-green-600 rounded-full text-white text-xs shadow-md transition"
+                  >
+                    <Download className="w-4 h-4" />
+                    Download
+                  </button>
+
+                  {/* likes */}
+                  <div className="flex gap-1 items-center">
+                    <p>{creation.likes.length}</p>
+                    {togglingId === creation.id ? (
+                      <span className="w-5 h-5 my-1 rounded-full border-2 border-t-transparent animate-spin border-white"></span>
+                    ) : (
+                      <Heart
+                        onClick={() => imageLikeToggle(creation.id)}
+                        className={`w-5 h-5 hover:scale-110 transition cursor-pointer ${
+                          creation?.likes?.includes(user?.id)
+                            ? "fill-red-500 text-red-600"
+                            : "text-white"
+                        }`}
+                      />
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
