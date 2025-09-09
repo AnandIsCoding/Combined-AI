@@ -35,8 +35,6 @@ Source Code: [GitHub Repository](https://github.com/AnandIsCoding/Combined-AI)
 
 ## 🖥️ Screenshots
 
-> Put your screenshots in `public/` or `assets/` and update these paths.
-
 ### 🔑 Authentication & Landing Page
 ![Landing Page](./client/public/Home.png)
 
