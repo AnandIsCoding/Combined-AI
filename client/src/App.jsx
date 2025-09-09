@@ -7,10 +7,11 @@ import ReviewResume from "./pages/ReviewResume";
 import BlogTitle from "./pages/BlogTitle";
 import GenerateImages from "./pages/GenerateImages";
 import Home from "./pages/Home";
-import Dashboard from "./pages/dashboard";
 import RemoveObject from "./pages/RemoveObject";
 import Community from "./pages/Community";
+
 import { useAuth } from "@clerk/clerk-react";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
