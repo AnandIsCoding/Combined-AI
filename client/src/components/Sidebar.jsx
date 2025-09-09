@@ -69,27 +69,54 @@ function Sidebar({ user, isSidebaropen, setIsSidebarOpen }) {
       </div>
 
       {/* nav items */}
-      <nav className="flex-1 mt-6 px-4 space-y-1 overflow-y-auto">
-        {navItems.map(({ name, path, Icon }) => (
-          <NavLink
-            key={path}
-            to={path}
-            end={path === "/ai"}
-            onClick={() => setIsSidebarOpen(false)}
-            className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2 rounded text-sm
-              hover:bg-gray-100 ${
-                isActive
-                  ? "bg-gradient-to-r from-[#3C81F6] to-[#9234EA] text-white"
-                  : "text-gray-700"
-              }`
-            }
-          >
-            <Icon className="w-4 h-4" />
-            {name}
-          </NavLink>
-        ))}
-      </nav>
+<nav className="flex-1 mt-6 mb-4 px-4 space-y-1 ">
+  {navItems.map(({ name, path, Icon }) => {
+    const isPremiumItem = [
+      "/ai/generate-images",
+      "/ai/remove-background",
+      "/ai/remove-object",
+      "/ai/review-resume",
+    ].includes(path);
+
+    const link = (
+      <NavLink
+        key={path}
+        to={path}
+        end={path === "/ai"}
+        onClick={() => setIsSidebarOpen(false)}
+        className={({ isActive }) =>
+          `flex items-center gap-3 px-3 py-2 rounded text-sm
+          hover:bg-gray-100 ${
+            isActive
+              ? "bg-gradient-to-r from-[#3C81F6] to-[#9234EA] text-white"
+              : "text-gray-700"
+          }`
+        }
+      >
+        <Icon className="w-4 h-4" />
+        {name}
+      </NavLink>
+    );
+
+    // If premium-only, wrap in Protect
+    return isPremiumItem ? (
+      <Protect key={path} plan="premium" fallback={
+        <div
+          key={path}
+          className="flex items-center gap-3 px-3 py-2 rounded text-sm text-gray-400 cursor-not-allowed opacity-50"
+        >
+          <Icon className="w-4 h-4" />
+          {name} (Premium)
+        </div>
+      }>
+        {link}
+      </Protect>
+    ) : (
+      link
+    );
+  })}
+</nav>
+
 
       {/* footer buttons */}
       <div className="mb-4 px-4 space-y-2">
