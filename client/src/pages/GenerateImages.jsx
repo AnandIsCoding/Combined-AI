@@ -51,15 +51,32 @@ function GenerateImages() {
   };
 
   // handle download
-  const handleDownload = () => {
-    if (!content) return;
+  // ...
+const handleDownload = async () => {
+  try {
+    // Fetch the image as a blob
+    const response = await fetch(content, {
+      mode: "cors", // ensure CORS if needed
+    });
+    const blob = await response.blob();
+
+    // Create a local URL for the blob
+    const url = window.URL.createObjectURL(blob);
+
+    // Create a temporary link element
     const link = document.createElement("a");
-    link.href = content;
-    link.download = "ai-generated-image.png"; // file name
+    link.href = url;
+    link.download = "ai-generated-image.png"; // filename
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
+
+    // Revoke the URL after download
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error("Download failed: ", err);
+  }
+};
 
   return (
     <div className="h-full overflow-y-scroll p-6 w-full flex items-start flex-wrap gap-4 text-slate-700">
